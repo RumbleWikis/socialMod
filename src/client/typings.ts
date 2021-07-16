@@ -40,6 +40,8 @@ export interface Filter {
   name: string;
   /** What to do if filter is triggered */
   action: "log" | "delete" | "recategorize" | "reply";
+  /** Categories that the post must be in to be acted on */
+  originCategoryIds: string[];
   /** Category to move to (if action = "recategorize") */
   targetCategoryId?: string;
   /** Content to reply with (if action = "reply") */

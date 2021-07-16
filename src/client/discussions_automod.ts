@@ -31,6 +31,8 @@ export class DiscussionsAutomod extends DiscussionsClient {
             this.filters.forEach((filter) => {
               if (filter.rightsBypass && post.createdBy.badgePermission) return;
 
+              if(filter.originCategoryIds && !filter.originCategoryIds.includes(post.forumId)) return;
+
               filter.checkTitle = filter.checkTitle ?? true;
               let filteringRule: RegExp;
 
@@ -71,7 +73,7 @@ export class DiscussionsAutomod extends DiscussionsClient {
                     if (!filter.targetCategoryId) {
                       throw new Error("No Target Category ID");
                     }
-                    if (post.isReply) {
+                    if (post.isReply || post.forumId == filter.targetCategoryId) {
                       // Can't recategorize a post
                     } else {
                       this.changeThreadCategory(
