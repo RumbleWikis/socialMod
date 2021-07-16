@@ -447,7 +447,7 @@ export class DiscussionsClient {
         method: "getThreads",
         params: {
           sortKey: "creation_date",
-          limit: options?.limit?.toString() ?? "20",
+          limit: options?.limit?.toString() ?? "100",
           viewableOnly: options?.viewableOnly?.toString() ?? "true",
         },
         requestMethod: "GET",
@@ -463,7 +463,7 @@ export class DiscussionsClient {
         method: "getPosts",
         params: {
           sortKey: "creation_date",
-          limit: options?.limit?.toString() ?? "20",
+          limit: options?.limit?.toString() ?? "100",
           viewableOnly: options?.viewableOnly?.toString() ?? "true",
         },
         requestMethod: "GET",
