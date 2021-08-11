@@ -106,37 +106,32 @@ export class DiscussionsAutomod extends DiscussionsClient {
                       });
                     }
                     break;
-                  // deno-lint-ignore no-case-declarations
                   case "edit":
                     if (!filter.editContent) {
                       throw new Error("No Edit Content");
                     }
 
-                    let newContent: string;
-
-                    if (typeof filter.editContent == "function") {
-                      newContent = filter.editContent(post);
-                    } else {
-                      newContent = filter.editContent;
-                    }
-
-                    if (post.isReply) {
-                      this.editPost(post.id, { body: newContent }).catch(
-                        (reason) => {
-                          throw new Error(reason);
-                        },
-                      );
-                    } else {
-                      this.editThread(post.threadId, {
-                        body: newContent,
-                        type: post.type,
-                        title: post.title,
-                      }).catch(
-                        (reason) => {
-                          throw new Error(reason);
-                        },
-                      );
-                    }
+                    Promise.resolve(
+                      filter.editContent(post),
+                    ).then((newContent) => {
+                      if (post.isReply) {
+                        this.editPost(post.id, { body: newContent }).catch(
+                          (reason) => {
+                            throw new Error(reason);
+                          },
+                        );
+                      } else {
+                        this.editThread(post.threadId, {
+                          body: newContent,
+                          type: post.type,
+                          title: post.title,
+                        }).catch(
+                          (reason) => {
+                            throw new Error(reason);
+                          },
+                        );
+                      }
+                    });
                     break;
                 }
 

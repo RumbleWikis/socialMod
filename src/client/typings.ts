@@ -47,7 +47,7 @@ export interface Filter {
   /** Content to reply with (if action = "reply") */
   replyMessage?: string;
   /** Content to replace with */
-  editContent?: string | ((post: any) => string);
+  editContent?: (post: any) => string | Promise<string>;
   /** Array of regexp filters */
   rules: RegExp[];
   /** Optional discord webhook to send actions to */
