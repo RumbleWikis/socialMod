@@ -127,7 +127,7 @@ export class DiscussionsAutomod extends DiscussionsClient {
                         },
                       );
                     } else {
-                      this.editThread(post.id, {
+                      this.editThread(post.threadId, {
                         body: newContent,
                         type: post.type,
                         title: post.title,
