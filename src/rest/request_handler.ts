@@ -2,7 +2,8 @@ import { RequestHandlerSettings } from "./typings.ts";
 import { urlcat } from "../../deps.ts";
 
 export function handleRequest(data: RequestHandlerSettings) {
-  return new Promise((resolve, reject) => {
+  // deno-lint-ignore no-async-promise-executor
+  return new Promise(async (resolve, reject) => {
     const url = urlcat(`https://${data.domain}.fandom.com`, "wikia.php", {
       controller: data.controller,
       method: data.method,
@@ -24,7 +25,7 @@ export function handleRequest(data: RequestHandlerSettings) {
         "User-Agent":
           `Automoderator(socialMod, https://github.com/RumbleWikis/socialMod)`,
       },
-      body: JSON.stringify(data.body) || null,
+      body: JSON.stringify(await Promise.resolve(data.body)) || null,
     }).then((response) => {
       if (!response.ok) reject(`${response.status} ${response.statusText}`);
       console.log(data.body);
