@@ -21,12 +21,15 @@ export function handleRequest(data: RequestHandlerSettings) {
         "cookie": (data.useAuthentication
           ? `access_token=${data.authToken}`
           : "") ?? "",
-        "User-Agent": `Automoderator(socialMod, https://github.com/RumbleWikis/socialMod)`,
+        "User-Agent":
+          `Automoderator(socialMod, https://github.com/RumbleWikis/socialMod)`,
       },
       body: JSON.stringify(data.body) || null,
     }).then((response) => {
       if (!response.ok) reject(`${response.status} ${response.statusText}`);
+      console.log(data.body);
       console.log(response.status, response.statusText);
+      console.log(Deno.inspect(response.body));
       if (response.status != 204) {
         response.json().then((json) => {
           resolve(json);
