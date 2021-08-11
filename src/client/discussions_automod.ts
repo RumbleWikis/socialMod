@@ -31,7 +31,12 @@ export class DiscussionsAutomod extends DiscussionsClient {
             this.filters.forEach((filter) => {
               if (filter.rightsBypass && post.createdBy.badgePermission) return;
 
-              if(filter.originCategoryIds && !filter.originCategoryIds.includes(post.forumId)) return;
+              if (
+                filter.originCategoryIds &&
+                !filter.originCategoryIds.includes(post.forumId)
+              ) {
+                return;
+              }
 
               filter.checkTitle = filter.checkTitle ?? true;
               let filteringRule: RegExp;
@@ -73,7 +78,9 @@ export class DiscussionsAutomod extends DiscussionsClient {
                     if (!filter.targetCategoryId) {
                       throw new Error("No Target Category ID");
                     }
-                    if (post.isReply || post.forumId == filter.targetCategoryId) {
+                    if (
+                      post.isReply || post.forumId == filter.targetCategoryId
+                    ) {
                       // Can't recategorize a post
                     } else {
                       this.changeThreadCategory(
@@ -97,6 +104,38 @@ export class DiscussionsAutomod extends DiscussionsClient {
                       }).catch((reason) => {
                         throw new Error(reason);
                       });
+                    }
+                    break;
+                  // deno-lint-ignore no-case-declarations
+                  case "edit":
+                    if (!filter.editContent) {
+                      throw new Error("No Edit Content");
+                    }
+
+                    let newContent: string;
+
+                    if (typeof filter.editContent == "function") {
+                      newContent = filter.editContent(post);
+                    } else {
+                      newContent = filter.editContent;
+                    }
+
+                    if (post.isReply) {
+                      this.editPost(post.id, { body: newContent }).catch(
+                        (reason) => {
+                          throw new Error(reason);
+                        },
+                      );
+                    } else {
+                      this.editThread(post.id, {
+                        body: newContent,
+                        type: post.type,
+                        title: post.title,
+                      }).catch(
+                        (reason) => {
+                          throw new Error(reason);
+                        },
+                      );
                     }
                     break;
                 }
