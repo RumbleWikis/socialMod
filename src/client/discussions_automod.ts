@@ -58,6 +58,8 @@ export class DiscussionsAutomod extends DiscussionsClient {
               });
 
               if (filteringRule!) {
+                /** Whether or not to log the action or not (set to false if unable to perform action) */
+                let logAction = true;
                 //Perform action
                 switch (filter.action) {
                   case "log":
@@ -82,6 +84,7 @@ export class DiscussionsAutomod extends DiscussionsClient {
                       post.isReply || post.forumId == filter.targetCategoryId
                     ) {
                       // Can't recategorize a post
+                      logAction = false;
                     } else {
                       this.changeThreadCategory(
                         post.threadId,
@@ -97,6 +100,7 @@ export class DiscussionsAutomod extends DiscussionsClient {
                     }
                     if (post.isReply) {
                       // Can't reply to a post
+                      logAction = false;
                     } else {
                       this.createPost({
                         threadId: post.threadId,
@@ -136,8 +140,7 @@ export class DiscussionsAutomod extends DiscussionsClient {
                 }
 
                 if (
-                  filter.discordWebhookUrl ??
-                    this.defaultFilterDiscordWebhookUrl
+                  (filter.discordWebhookUrl ??
                 ) {
                   // Create Embed & Log Action
                   const embed = {
