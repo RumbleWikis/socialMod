@@ -194,7 +194,7 @@ export class DiscussionsAutomod extends DiscussionsClient {
           }
         });
 
-        this.lastPostId = posts[0].id ? BigInt(posts[0].id) : this.lastPostId
+        this.lastPostId = posts[0] ? BigInt(posts[0].id) : this.lastPostId
       }, (error) => {
         console.error(error);
       });
