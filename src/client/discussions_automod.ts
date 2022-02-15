@@ -3,7 +3,7 @@ import { DiscussionsAutomodSettings, Filter } from "./typings.ts";
 import { ActionEmbedColours } from "../util/constants.ts";
 
 export class DiscussionsAutomod extends DiscussionsClient {
-  private filters: Filter[];
+  filters: Filter[];
   private lastPostId: bigint;
   private filterInterval: number;
   private defaultFilterDiscordWebhookUrl?: string;
